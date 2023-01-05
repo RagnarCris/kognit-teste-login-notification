@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import axios from 'axios';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -21,11 +22,17 @@ export default function CustomAppBar() {
 
     const [anchorEl, setAnchorEl] = useState(null);
     const [anchorElHelp, setAnchorElHelp] = useState(null);
+    const [anchorElNotification, setAnchorElNotification] = useState(null);
 
     const isMenuOpen = Boolean(anchorEl);
 
     const isHelpOpen = Boolean(anchorElHelp);
     const helpId = isHelpOpen ? 'simple-popover' : undefined;
+    
+    const isNotificationOpen = Boolean(anchorElNotification);
+    const notificationId = isNotificationOpen ? 'notify-popover' : undefined;
+
+    
 
     const handleClickHelp = (event) => {
         setAnchorElHelp(event.currentTarget);
@@ -33,6 +40,14 @@ export default function CustomAppBar() {
 
     const handleCloseHelp = () => {
         setAnchorElHelp(null);
+    };
+
+    const handleClickNotification = (event) => {
+        setAnchorElNotification(event.currentTarget);
+    };
+
+    const handleCloseNotification = () => {
+        setAnchorElNotification(null);
     };
 
     const handleProfileMenuOpen = (event) => {
@@ -122,9 +137,27 @@ export default function CustomAppBar() {
                     size="large"
                     aria-label="notifications"
                     color="success"
+                    onClick={handleClickNotification}
+                    aria-describedby={notificationId}
                 >
                     <NotificationsIcon />
                 </IconButton>
+                <Popover
+                    id={notificationId}
+                    open={isNotificationOpen}
+                    anchorEl={anchorElNotification}
+                    onClose={handleCloseNotification}
+                    anchorOrigin={{
+                        vertical: 'bottom',
+                        horizontal: 'left',
+                    }}
+                    transformOrigin={{
+                        vertical: 'top',
+                        horizontal: 'right',
+                    }}
+                >
+                    <Typography align="center" style={{ wordWrap: "break-word" }} sx={{ p: 2 }}>Notificações</Typography>
+                </Popover>
                 </Box>
             </Toolbar>
             </AppBar>
