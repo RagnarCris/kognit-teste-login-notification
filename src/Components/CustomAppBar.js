@@ -16,6 +16,7 @@ import { useNavigate } from "react-router-dom";
 export default function CustomAppBar({notifications}) {
     const titleStyle={marginLeft:'25px'};
     const toolBarStyle={paddingLeft:'4px', paddingRight: '4px'};
+    const btnstyle={backgroundColor:'#f13434', color: 'white'};
 
     const navigate = useNavigate();
 
@@ -165,8 +166,8 @@ export default function CustomAppBar({notifications}) {
                         horizontal: 'right',
                     }}
                     PaperProps={{
-                        style: { width: '300px',
-                                height: '400px' },
+                        style: { width: '400px',
+                                height: '550px' },
                     }}
                 >
                     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
@@ -186,7 +187,7 @@ export default function CustomAppBar({notifications}) {
                                         align={'right'}
                                         style={{ minWidth: '150' }}
                                         >
-                                        <Button type='button' onClick={handleDeleteAllNotifications} color='danger' variant="contained" fullWidth>
+                                        <Button size="small" style={btnstyle} variant="filled" onClick={handleDeleteAllNotifications} >
                                             Limpar
                                         </Button>
                                         </TableCell>
@@ -209,11 +210,11 @@ export default function CustomAppBar({notifications}) {
                                             <TableCell key={2} align={'right'}>
                                                 <Typography >
                                                     <IconButton
-                                                        size="large"
+                                                        size="small"
                                                         aria-label="delete_notification"
-                                                        color="danger"
                                                         onClick={handleDeleteNotification(notification.id)}
-                                                        aria-describedby={helpId}
+                                                        aria-describedby={notificationId}
+                                                        style={btnstyle}
                                                     >
                                                         <CancelIcon/>
                                                     </IconButton>
