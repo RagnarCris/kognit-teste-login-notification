@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import { Paper, Button, Typography, Table, TableRow, TableHead, TableBody, TableCell, TableContainer } from '@mui/material';
@@ -52,12 +52,9 @@ export default function CustomAppBar({notifications}) {
         notifications.length = 0;
     }
     const handleDeleteNotification = (id) => {
-        setAnchorElNotification(null);
-        const objWithIdIndex = notifications.findIndex((obj) => obj.id === id);
-
-        if (objWithIdIndex > -1) {
-            notifications.splice(objWithIdIndex, 1);
-        }
+        notifications = notifications.filter(function( obj ) {
+            return obj.id !== id;
+        });
     };
 
     const handleProfileMenuOpen = (event) => {
@@ -170,14 +167,14 @@ export default function CustomAppBar({notifications}) {
                                 height: '550px' },
                     }}
                 >
-                    <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-                        <TableContainer sx={{ maxHeight: 440 }}>
+                    <Paper >
+                        <TableContainer >
                             <Table stickyHeader aria-label="sticky table">
                             <TableHead>
                                     <TableRow>
                                         <TableCell
                                         key={'edit'}
-                                        align={'right'}
+                                        align={'left'}
                                         style={{ minWidth: '150' }}
                                         >
                                         {'Editar notificações'}
@@ -197,30 +194,23 @@ export default function CustomAppBar({notifications}) {
                                 {notifications
                                 .map((notification) => {
                                     return (
-                                    <TableRow hover role="checkbox" tabIndex={-1} key={notification.id}>
-                                        <TableRow>    
-                                            <TableCell key={1} align={'right'}>
-                                                <Typography sx={{fontWeight: 'bold'}}>{notification.title}</Typography>
-                                            </TableCell>
-                                        </TableRow>
-                                        <TableRow>    
-                                            <TableCell key={1} align={'right'}>
-                                                <Typography >{notification.body}</Typography>
-                                            </TableCell>
-                                            <TableCell key={2} align={'right'}>
-                                                <Typography >
-                                                    <IconButton
-                                                        size="small"
-                                                        aria-label="delete_notification"
-                                                        onClick={handleDeleteNotification(notification.id)}
-                                                        aria-describedby={notificationId}
-                                                        style={btnstyle}
-                                                    >
-                                                        <CancelIcon/>
-                                                    </IconButton>
-                                                </Typography>
-                                            </TableCell>
-                                        </TableRow>
+                                    <TableRow hover role="checkbox" tabIndex={-1} key={notification.id}> 
+                                        <TableCell key={1} align={'left'}>
+                                            <Typography sx={{fontWeight: 'bold'}}>{notification.title}</Typography>
+                                            <Typography >{notification.body}</Typography>
+                                        </TableCell>
+                                        <TableCell key={2} align={'right'}>
+                                        <Typography >
+                                                <IconButton
+                                                    size="small"
+                                                    aria-label="delete_notification"
+                                                    onClick={handleDeleteNotification(notification.id)}
+                                                    style={btnstyle}
+                                                >
+                                                    <CancelIcon/>
+                                                </IconButton>
+                                            </Typography>
+                                        </TableCell>
                                     </TableRow>
                                     );
                                 })}
@@ -228,11 +218,6 @@ export default function CustomAppBar({notifications}) {
                             </Table>
                         </TableContainer>
                     </Paper>
-                    <div>
-                    {notifications.map((val)=>{
-                        console.log("Título: " + val.title);
-                    })}
-                    </div>
                 </Popover>
                 </Box>
             </Toolbar>
