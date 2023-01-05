@@ -6,33 +6,6 @@ import Typography from '@mui/material/Typography';
 function MainPage(){
     const [notifications, setNotifications] = useState([]);
     const [loading, setLoading] = useState(true);
-    
-    
-      {/*
-    const fetchNotifications = async () => {
-        const response = await fetch(
-            "https://jsonplaceholder.typicode.com/posts?userId=1"
-        );
-        const data = await response.json();
-        let result = data;
-        let notificationtList = []
-        for (let i = 0; i < result.length; i++) {
-            const noteObject = {
-                title: result[i].title,
-                quantity: result[i].body,
-                id: result[i].id
-            }
-            notificationtList.push(noteObject)
-        }
-        setNotifications(notificationtList);
-    }
-    // Fetching data when component did mount
-    useEffect(() => {
-        fetchNotifications();
-        setLoading(false);
-    },[])
-    */}
-    
     // Fetching data when component did mount
     useEffect(() => {
         fetch("https://jsonplaceholder.typicode.com/posts?userId=1", {
@@ -46,7 +19,7 @@ function MainPage(){
             for (let i = 0; i < result.length; i++) {
                 const noteObject = {
                     title: result[i].title,
-                    quantity: result[i].body,
+                    body: result[i].body,
                     id: result[i].id
                 }
                 notificationtList.push(noteObject)

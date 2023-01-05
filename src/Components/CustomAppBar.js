@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import { Paper, Button, Typography, ListItemText, ListItemIcon, List, ListItem, Divider, ListSubheader } from '@mui/material';
@@ -224,6 +224,11 @@ export default function CustomAppBar({notificationsProps}) {
                                     }
                                 })}
                         </List>
+                        <Paper sx={{ position: 'sticky', bottom: 0, padding:'4px'}} elevation={3}>
+                            <Button size="small" style={btnOkstyle} variant="filled" onClick={handleCloseNotification}>
+                                OK
+                            </Button>
+                        </Paper>
                     </Paper>
                 </Popover>
                 </Box>
