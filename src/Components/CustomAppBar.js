@@ -184,6 +184,7 @@ export default function CustomAppBar({notificationsProps}) {
                 >
                     <Paper >
                         <List
+                        sx={{ width: '100%', maxWidth: '400px', bgcolor: 'background.paper' }}
                         subheader={
                             <ListSubheader style={{display: 'flex', padding: '8px'}}>
                                 <ListItemText primary={"Editar notificações"}/>
@@ -203,9 +204,8 @@ export default function CustomAppBar({notificationsProps}) {
                                         return (
                                         <div>
                                         <ListItem key={notification.id}> 
-                                            <ListItemText key={notification.id+20} sx={{fontWeight: 'bold'}} primary={notification.title}/>
-                                            <ListItemText key={notification.id+21} primary={notification.body}/>
-                                            <ListItemIcon key={notification.id+22}>
+                                            <ListItemText primary={notification.title} secondary={notification.body}/>
+                                            <ListItemIcon >
                                                 <IconButton
                                                     size="small"
                                                     aria-label="delete_notification"
