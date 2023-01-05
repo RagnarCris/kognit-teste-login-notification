@@ -224,11 +224,6 @@ export default function CustomAppBar({notificationsProps}) {
                                     }
                                 })}
                         </List>
-                        <Paper sx={{ position: 'sticky', bottom: 0, padding:'4px'}} elevation={3}>
-                            <Button size="small" style={btnOkstyle} variant="filled" onClick={handleCloseNotification}>
-                                OK
-                            </Button>
-                        </Paper>
                     </Paper>
                 </Popover>
                 </Box>
