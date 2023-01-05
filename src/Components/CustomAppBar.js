@@ -1,11 +1,11 @@
-import React, {useState} from 'react';
-import axios from 'axios';
+import React, {useState, useEffect} from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
+import { Paper, Button, Typography, Table, TableRow, TableHead, TableBody, TableCell, TableContainer } from '@mui/material';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
 import MenuItem from '@mui/material/MenuItem';
+import CancelIcon from '@mui/icons-material/Cancel';
 import Menu from '@mui/material/Menu';
 import HelpIcon from '@mui/icons-material/Help';
 import AccountCircle from '@mui/icons-material/AccountCircle';
@@ -13,8 +13,7 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import Popover from '@mui/material/Popover';
 import { useNavigate } from "react-router-dom";
 
-export default function CustomAppBar() {
-
+export default function CustomAppBar({notifications}) {
     const titleStyle={marginLeft:'25px'};
     const toolBarStyle={paddingLeft:'4px', paddingRight: '4px'};
 
@@ -32,8 +31,6 @@ export default function CustomAppBar() {
     const isNotificationOpen = Boolean(anchorElNotification);
     const notificationId = isNotificationOpen ? 'notify-popover' : undefined;
 
-    
-
     const handleClickHelp = (event) => {
         setAnchorElHelp(event.currentTarget);
     };
@@ -48,6 +45,18 @@ export default function CustomAppBar() {
 
     const handleCloseNotification = () => {
         setAnchorElNotification(null);
+    };
+
+    const handleDeleteAllNotifications = () => {
+        notifications.length = 0;
+    }
+    const handleDeleteNotification = (id) => {
+        setAnchorElNotification(null);
+        const objWithIdIndex = notifications.findIndex((obj) => obj.id === id);
+
+        if (objWithIdIndex > -1) {
+            notifications.splice(objWithIdIndex, 1);
+        }
     };
 
     const handleProfileMenuOpen = (event) => {
@@ -155,8 +164,74 @@ export default function CustomAppBar() {
                         vertical: 'top',
                         horizontal: 'right',
                     }}
+                    PaperProps={{
+                        style: { width: '300px',
+                                height: '400px' },
+                    }}
                 >
-                    <Typography align="center" style={{ wordWrap: "break-word" }} sx={{ p: 2 }}>Notificações</Typography>
+                    <Paper sx={{ width: '100%', overflow: 'hidden' }}>
+                        <TableContainer sx={{ maxHeight: 440 }}>
+                            <Table stickyHeader aria-label="sticky table">
+                            <TableHead>
+                                    <TableRow>
+                                        <TableCell
+                                        key={'edit'}
+                                        align={'right'}
+                                        style={{ minWidth: '150' }}
+                                        >
+                                        {'Editar notificações'}
+                                        </TableCell>
+                                        <TableCell
+                                        key={'button-clean'}
+                                        align={'right'}
+                                        style={{ minWidth: '150' }}
+                                        >
+                                        <Button type='button' onClick={handleDeleteAllNotifications} color='danger' variant="contained" fullWidth>
+                                            Limpar
+                                        </Button>
+                                        </TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {notifications
+                                .map((notification) => {
+                                    return (
+                                    <TableRow hover role="checkbox" tabIndex={-1} key={notification.id}>
+                                        <TableRow>    
+                                            <TableCell key={1} align={'right'}>
+                                                <Typography sx={{fontWeight: 'bold'}}>{notification.title}</Typography>
+                                            </TableCell>
+                                        </TableRow>
+                                        <TableRow>    
+                                            <TableCell key={1} align={'right'}>
+                                                <Typography >{notification.body}</Typography>
+                                            </TableCell>
+                                            <TableCell key={2} align={'right'}>
+                                                <Typography >
+                                                    <IconButton
+                                                        size="large"
+                                                        aria-label="delete_notification"
+                                                        color="danger"
+                                                        onClick={handleDeleteNotification(notification.id)}
+                                                        aria-describedby={helpId}
+                                                    >
+                                                        <CancelIcon/>
+                                                    </IconButton>
+                                                </Typography>
+                                            </TableCell>
+                                        </TableRow>
+                                    </TableRow>
+                                    );
+                                })}
+                            </TableBody>
+                            </Table>
+                        </TableContainer>
+                    </Paper>
+                    <div>
+                    {notifications.map((val)=>{
+                        console.log("Título: " + val.title);
+                    })}
+                    </div>
                 </Popover>
                 </Box>
             </Toolbar>
