@@ -6,7 +6,12 @@ import MainPage from './Pages/MainPage';
 function App() {
   return (
     <div className="App">
-      <MainPage/>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<LoginPage />}></Route>
+          <Route path="/home" element={<MainPage />}></Route>
+        </Routes>
+      </BrowserRouter>
     </div>
   );
 }

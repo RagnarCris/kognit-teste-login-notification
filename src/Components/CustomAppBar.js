@@ -6,19 +6,34 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
-import MenuIcon from '@mui/icons-material/Menu';
 import HelpIcon from '@mui/icons-material/Help';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import NotificationsIcon from '@mui/icons-material/Notifications';
+import Popover from '@mui/material/Popover';
 import { useNavigate } from "react-router-dom";
 
 export default function CustomAppBar() {
 
-    //const navigate = useNavigate();
+    const titleStyle={marginLeft:'25px'};
+    const toolBarStyle={paddingLeft:'4px', paddingRight: '4px'};
+
+    const navigate = useNavigate();
 
     const [anchorEl, setAnchorEl] = useState(null);
+    const [anchorElHelp, setAnchorElHelp] = useState(null);
 
     const isMenuOpen = Boolean(anchorEl);
+
+    const isHelpOpen = Boolean(anchorElHelp);
+    const helpId = isHelpOpen ? 'simple-popover' : undefined;
+
+    const handleClickHelp = (event) => {
+        setAnchorElHelp(event.currentTarget);
+    };
+
+    const handleCloseHelp = () => {
+        setAnchorElHelp(null);
+    };
 
     const handleProfileMenuOpen = (event) => {
         setAnchorEl(event.currentTarget);
@@ -26,7 +41,7 @@ export default function CustomAppBar() {
 
     const handleMenuClose = () => {
         setAnchorEl(null);
-        //navigate("/");
+        navigate("/");
     };
 
     const menuId = 'success-menu';
@@ -55,19 +70,23 @@ export default function CustomAppBar() {
             <AppBar position="static" color="inherit">
             <Toolbar>
                 <IconButton
-                size="large"
-                edge="start"
-                color="success"
-                aria-label="open drawer"
-                sx={{ mr: 2 }}
+                    size="large"
+                    edge="end"
+                    aria-label="account of current user"
+                    aria-controls={menuId}
+                    aria-haspopup="true"
+                    onClick={handleProfileMenuOpen}
+                    color="success"
+                    style={toolBarStyle}
                 >
-                <MenuIcon />
+                    <AccountCircle />
                 </IconButton>
                 <Typography
                 variant="h6"
                 noWrap
                 component="div"
                 color="success"
+                style={titleStyle}
                 sx={{ display: { xs: 'none', sm: 'block' } }}
                 >
                 KOGNIT
@@ -76,21 +95,35 @@ export default function CustomAppBar() {
                 <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
                 <IconButton
                     size="large"
+                    aria-label="ask-help"
+                    color="success"
+                    onClick={handleClickHelp}
+                    aria-describedby={helpId}
+                >
+                    <HelpIcon />
+                </IconButton>
+                <Popover
+                    id={helpId}
+                    open={isHelpOpen}
+                    anchorEl={anchorElHelp}
+                    onClose={handleCloseHelp}
+                    anchorOrigin={{
+                        vertical: 'bottom',
+                        horizontal: 'center',
+                    }}
+                    transformOrigin={{
+                        vertical: 'top',
+                        horizontal: 'center',
+                    }}
+                >
+                    <Typography align="center" style={{ wordWrap: "break-word" }} sx={{ p: 2 }}>Contato para ajuda: (11)999999999</Typography>
+                </Popover>
+                <IconButton
+                    size="large"
                     aria-label="notifications"
                     color="success"
                 >
                     <NotificationsIcon />
-                </IconButton>
-                <IconButton
-                    size="large"
-                    edge="end"
-                    aria-label="account of current user"
-                    aria-controls={menuId}
-                    aria-haspopup="true"
-                    onClick={handleProfileMenuOpen}
-                    color="success"
-                >
-                    <AccountCircle />
                 </IconButton>
                 </Box>
             </Toolbar>
