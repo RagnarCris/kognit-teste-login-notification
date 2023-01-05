@@ -1,7 +1,7 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
-import { Paper, Button, Typography, Table, TableRow, TableHead, TableBody, TableCell, TableContainer } from '@mui/material';
+import { Paper, Button, Typography, ListItemText, ListItemIcon, List, ListItem, Divider, ListSubheader } from '@mui/material';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
 import MenuItem from '@mui/material/MenuItem';
@@ -13,16 +13,18 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import Popover from '@mui/material/Popover';
 import { useNavigate } from "react-router-dom";
 
-export default function CustomAppBar({notifications}) {
+export default function CustomAppBar({notificationsProps}) {
     const titleStyle={marginLeft:'25px'};
     const toolBarStyle={paddingLeft:'4px', paddingRight: '4px'};
-    const btnstyle={backgroundColor:'#f13434', color: 'white'};
+    const btnstyle={marginLeft: '15px', backgroundColor:'#f13434', color: 'white'};
+    const btnOkstyle={marginLeft: '300px', backgroundColor:'#40b441', color: 'white'};
 
     const navigate = useNavigate();
 
     const [anchorEl, setAnchorEl] = useState(null);
     const [anchorElHelp, setAnchorElHelp] = useState(null);
     const [anchorElNotification, setAnchorElNotification] = useState(null);
+    const [deleted, setDeleted] = useState([]);
 
     const isMenuOpen = Boolean(anchorEl);
 
@@ -31,6 +33,28 @@ export default function CustomAppBar({notifications}) {
     
     const isNotificationOpen = Boolean(anchorElNotification);
     const notificationId = isNotificationOpen ? 'notify-popover' : undefined;
+
+    let notifications = notificationsProps;
+
+    //useEffect(() => {
+        
+    //},[listDeleted])
+
+    const handleDeleteAllNotifications = () => {
+        //notifications = [];
+        //console.log(notifications);
+        let listDeleted = notifications.map((notification) => notification.id);
+        setDeleted(listDeleted);
+    }
+    
+    const handleDeleteNotification = (id) => {
+        //console.log(notifications[id-1]);
+        const listDeleted = [...deleted]
+        listDeleted.push(id)
+        setDeleted(listDeleted)
+        //notifications = notifications.filter(( item, index ) => item.id !== id );
+        
+    };
 
     const handleClickHelp = (event) => {
         setAnchorElHelp(event.currentTarget);
@@ -46,15 +70,6 @@ export default function CustomAppBar({notifications}) {
 
     const handleCloseNotification = () => {
         setAnchorElNotification(null);
-    };
-
-    const handleDeleteAllNotifications = () => {
-        notifications.length = 0;
-    }
-    const handleDeleteNotification = (id) => {
-        notifications = notifications.filter(function( obj ) {
-            return obj.id !== id;
-        });
     };
 
     const handleProfileMenuOpen = (event) => {
@@ -168,55 +183,52 @@ export default function CustomAppBar({notifications}) {
                     }}
                 >
                     <Paper >
-                        <TableContainer >
-                            <Table stickyHeader aria-label="sticky table">
-                            <TableHead>
-                                    <TableRow>
-                                        <TableCell
-                                        key={'edit'}
-                                        align={'left'}
-                                        style={{ minWidth: '150' }}
-                                        >
-                                        {'Editar notificações'}
-                                        </TableCell>
-                                        <TableCell
-                                        key={'button-clean'}
-                                        align={'right'}
-                                        style={{ minWidth: '150' }}
-                                        >
-                                        <Button size="small" style={btnstyle} variant="filled" onClick={handleDeleteAllNotifications} >
-                                            Limpar
-                                        </Button>
-                                        </TableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {notifications
+                        <List
+                        subheader={
+                            <ListSubheader style={{display: 'flex', padding: '8px'}}>
+                                <ListItemText primary={"Editar notificações"}/>
+                                <Button size="small" style={btnstyle} variant="filled" onClick={handleDeleteAllNotifications} >
+                                    Limpar
+                                </Button>
+                            </ListSubheader>
+                        }
+                        >
+                            <Divider/>
+                            {notifications
                                 .map((notification) => {
-                                    return (
-                                    <TableRow hover role="checkbox" tabIndex={-1} key={notification.id}> 
-                                        <TableCell key={1} align={'left'}>
-                                            <Typography sx={{fontWeight: 'bold'}}>{notification.title}</Typography>
-                                            <Typography >{notification.body}</Typography>
-                                        </TableCell>
-                                        <TableCell key={2} align={'right'}>
-                                        <Typography >
+                                    if(deleted.includes(notification.id)){
+                                        return(null)
+                                    }
+                                    else{
+                                        return (
+                                        <div>
+                                        <ListItem key={notification.id}> 
+                                            <ListItemText key={notification.id+20} sx={{fontWeight: 'bold'}} primary={notification.title}/>
+                                            <ListItemText key={notification.id+21} primary={notification.body}/>
+                                            <ListItemIcon key={notification.id+22}>
                                                 <IconButton
                                                     size="small"
                                                     aria-label="delete_notification"
-                                                    onClick={handleDeleteNotification(notification.id)}
+                                                    onClick={
+                                                        () => {handleDeleteNotification(notification.id)}
+                                                    }
                                                     style={btnstyle}
                                                 >
                                                     <CancelIcon/>
                                                 </IconButton>
-                                            </Typography>
-                                        </TableCell>
-                                    </TableRow>
-                                    );
+                                            </ListItemIcon>
+                                        </ListItem>
+                                        <Divider/>
+                                        </div>
+                                        );
+                                    }
                                 })}
-                            </TableBody>
-                            </Table>
-                        </TableContainer>
+                        </List>
+                        <Paper sx={{ position: 'sticky', bottom: 0, padding:'4px'}} elevation={3}>
+                            <Button size="small" style={btnOkstyle} variant="filled" onClick={handleCloseNotification}>
+                                OK
+                            </Button>
+                        </Paper>
                     </Paper>
                 </Popover>
                 </Box>

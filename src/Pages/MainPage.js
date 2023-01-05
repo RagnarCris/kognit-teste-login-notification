@@ -7,7 +7,8 @@ function MainPage(){
     const [notifications, setNotifications] = useState([]);
     const [loading, setLoading] = useState(true);
     
-    {/*
+    
+      {/*
     const fetchNotifications = async () => {
         const response = await fetch(
             "https://jsonplaceholder.typicode.com/posts?userId=1"
@@ -18,7 +19,8 @@ function MainPage(){
         for (let i = 0; i < result.length; i++) {
             const noteObject = {
                 title: result[i].title,
-                quantity: result[i].body
+                quantity: result[i].body,
+                id: result[i].id
             }
             notificationtList.push(noteObject)
         }
@@ -27,8 +29,10 @@ function MainPage(){
     // Fetching data when component did mount
     useEffect(() => {
         fetchNotifications();
-      },[])
+        setLoading(false);
+    },[])
     */}
+    
     // Fetching data when component did mount
     useEffect(() => {
         fetch("https://jsonplaceholder.typicode.com/posts?userId=1", {
@@ -52,7 +56,7 @@ function MainPage(){
         .catch(e => console.log(e))
         .finally(()=>setLoading(false));
       },[])
-
+      
     return (
         <React.Fragment>
             {
@@ -62,7 +66,7 @@ function MainPage(){
                 </Typography>
                 :(
                     <>
-                        <CustomAppBar notifications={notifications}/>
+                        <CustomAppBar notificationsProps={notifications}/>
                         <Toolbar />
                         <Typography>
                             Conteúdo qualquer para preencher.
